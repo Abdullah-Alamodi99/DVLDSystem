@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "إدارة أنواع الطلبات";
+}
+
+@model List<ApplicationType>
+
+<div class="main-content">
+    <div class="container px-2 px-md-4">
+        <!-- Page header -->
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="mb-0">قائمة أنواع الطلبات</h5>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">قائمة أنواع الطلبات</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive bg-white rounded shadow-sm p-3">
+            <table class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="w-50">العنوان</th>
+                        <th class="text-center">الرسوم</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(!Model.Any() || Model == null)
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-3">
+                                لا توجد بيانات
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var type in Model)
+                        {
+                            <tr>
+                                <td>@type.Title</td>
+                                <td class="text-center">@type.Fees</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                                        <a asp-controller="ApplicationType" asp-action="Edit" asp-route-Id="@type.Id"
+                                           class="btn btn-primary btn-sm d-flex align-items-center">
+                                            <i class="fa-solid fa-pencil me-1"></i> تعديل
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

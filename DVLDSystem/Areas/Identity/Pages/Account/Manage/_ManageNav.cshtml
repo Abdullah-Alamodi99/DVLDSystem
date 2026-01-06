@@ -1,0 +1,9 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav nav-pills flex-md-column flex-row justify-content-between py-3 px-0 p-md-4">
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">الملف الشخصي</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext) disabled" id="email" asp-page="./Email">البريد الالكتروني</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">كلمة المرور</a></li>
+</ul>

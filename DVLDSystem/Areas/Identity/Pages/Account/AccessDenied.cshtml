@@ -1,0 +1,14 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "ممنوع الوصول";
+}
+
+<div class="main-content">
+    <div class="container">
+        <header class="mt-3">
+            <h3 class="text-danger">@ViewData["Title"]</h3>
+            <p class="text-danger">ليس لديك الصلاحية للوصول الى هذا المصدر</p>
+        </header>
+    </div>
+</div>

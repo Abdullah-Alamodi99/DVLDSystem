@@ -1,0 +1,22 @@
+﻿@model LocalDrivingLicenseApplication
+@{
+    ViewData["Title"] = "معلومات الطلب";
+}
+<div class="main-content mb-3">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> تفاصيل الطلب </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="LocalDrivingLicenseApplication" asp-action="Index">قائمة الطلبات</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">تفاصيل الطلب</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+        <partial name="_DrivingLicenseApplicationInfo" model="@Model" />
+    </div>
+</div>
+
+

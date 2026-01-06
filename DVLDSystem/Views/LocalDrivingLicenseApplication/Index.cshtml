@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "الطلبات";
+}
+<div class="main-content mb-3">
+    <div class="container-fluid">
+
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> الطلبات </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="LocalDrivingLicenseApplication" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">الطلبات</li>
+                </ol>
+            </div>
+        </div>
+        
+
+        <!-- ==== Table Section ==== -->
+        <div class="bg-white rounded p-3 shadow-sm">
+            <div class="w-100 text-end">
+                <a asp-controller="LocalDrivingLicenseApplication"
+                   asp-action="AddEdit"
+                   class="btn btn-primary my-2 mb-3">
+                    <i class="fa-solid fa-person-circle-plus me-2"></i> أضافة طلب
+                </a>
+            </div>
+
+            <table id="tblData" class="table table-striped table-borderless nowrap pt-1 w-100">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>معرف الطلب</th>
+                        <th>أسم الفئة</th>
+                        <th>الرقم الوطني</th>
+                        <th>الأسم كامل</th>
+                        <th>تاريخ الطلب</th>
+                        <th>حالة الطلب</th>
+                        <th>الاختبارات المجتازة</th>
+                        <th>العمليات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic rows go here -->
+                </tbody>
+            </table>
+
+        </div>
+        <!-- ==== /Table Section ==== -->
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/local-driving-license-app.js"></script>
+    <script src="~/js/site.js"></script>
+}

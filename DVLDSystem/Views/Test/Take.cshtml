@@ -1,0 +1,137 @@
+﻿@model TestVM
+@{
+    ViewData["Title"] = "عمل الفحص";
+
+    string TestType = "";
+    switch (Model.TestAppointment.TestTypeId)
+    {
+        case (int)DVLD.Models.TestType.enTestType.VisionTest:
+            if (!Model.HasPassedTest && Model.TestAppointment.IsLocked)
+                TestType = "أعادة فحص النظر";
+            else
+                TestType = "فحص النظر";
+            break;
+        case (int)DVLD.Models.TestType.enTestType.WrittenTest:
+            if (!Model.HasPassedTest && Model.TestAppointment.IsLocked)
+                TestType = "أعادة الفحص الكتابي";
+            else
+                TestType = "الفحص الكتابي";
+            break;
+        case (int)DVLD.Models.TestType.enTestType.StreetTest:
+            if (!Model.HasPassedTest && Model.TestAppointment.IsLocked)
+                TestType = "أعادة فحص الشارع";
+            else
+                TestType = "فحص الشارع";
+            break;
+        default:
+            TestType = "غير معروف";
+            break;
+    }
+}
+<div class="main-content">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-0">@TestType</h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="TestAppointment"
+                           asp-route-LDLAppID="@Model.TestAppointment.LocalDrivingLicenseApplicationId"
+                           asp-route-TestTypeID="@Model.TestAppointment.TestTypeId"
+                           asp-action="Index">قائمة المواعيد</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">@TestType</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+        <div class="card bg-white rounded shadow border-0 mb-4">
+            <div class="card-header bg-primary p-3">
+                <h5 class="text-white mb-0">@TestType</h5>
+            </div>
+            <div class="card-body">
+                @{
+                    if (Model.HasPassedTest)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>
+                            لا يمكن عمل الفحص مرة أخرى لان الشخص بالفعل أخذ الامتحان وأجتازه بنجاح
+                        </div>
+                    }
+                    else
+                    {
+                        if (!Model.HasPassedTest && Model.TestAppointment.IsLocked)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                                لا يمكن عمل الفحص مرة أخرى لان الشخص بالفعل أخذ الامتحان وفشل فيه, قم بعمل موعد جديد للفحص
+                            </div>
+                        }
+                    }
+                }
+                <span class="d-block p-2">
+                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                    <span class="fw-semibold">رقم طلب الرخصة :</span> @Model.TestAppointment.LocalDrivingLicenseApplicationId
+                </span>
+                <span class="d-block p-2">
+                    <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                    <span class="fw-semibold">فئة الرخصة : </span> @Model.TestAppointment.LocalDrivingLicenseApplication.LicenseClass.Name
+                </span>
+                <span class="d-block p-2">
+                    <i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i>
+                    <span class="fw-semibold">أسم المقدم للرخصة : </span> @Model.TestAppointment.LocalDrivingLicenseApplication.Person.FullName
+                </span>
+                <span class="d-block p-2">
+                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                    <span class="fw-semibold"> تاريخ موعد الفحص : </span> @Model.TestAppointment.Date.ToShortDateString()
+                </span>
+                <span class="d-block p-2">
+                    <i class="fa-solid fa-coins fa-fw fa-lg me-2 icon-primary"></i>
+                    <span class="fw-semibold">رسوم الفحص : </span>  @Model.TestAppointment.TestType.Fees
+                </span>
+                <hr />
+                <form method="post">
+                    <input asp-for="@Model.Test.Id" hidden />
+                    <input asp-for="@Model.Test.TestAppointmentId" hidden />
+                    <input asp-for="@Model.Test.CreatedByUserId" hidden />
+
+                    @{
+                        string disabled = Model.TestAppointment.IsLocked ? "disabled" : "";
+                    }
+
+                    <div class="d-flex align-items-center p-2">
+                        <div>
+                            <i class="fa-solid fa-square-poll-vertical fa-fw fa-lg me-2 icon-primary"></i>
+                            <span class="me-3 fw-semibold">نتيجة الفحص : </span>
+                        </div>
+                        
+                        <div class="form-group form-check-inline">
+                            <label class="form-check-label @disabled">
+                                <input  class="form-radio-input" value="True"type="radio" asp-for="@Model.Test.TestResult"
+                                checked="@(Model.HasPassedTest == true ? "checked" : null)" /> ناجح
+                            </label>
+                        </div>
+                        <div class="form-group form-check-inline">
+                            <label class="form-check-label @disabled">
+                                <input class="form-radio-input @disabled" value="False" type="radio" asp-for="@Model.Test.TestResult"
+                                       checked="@(Model.HasPassedTest == false ? "checked" : null)" /> راسب
+                            </label>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-flex align-items-center p-2">
+                        <i class="fa-solid fa-note-sticky fa-fw fa-lg me-2 icon-primary"></i>
+                        <label asp-for="@Model.Test.Notes" class="fw-semibold text-nowrap me-2">ملاحضات : </label>
+                        <textarea asp-for="@Model.Test.Notes" class="form-control @disabled" placeholder="أكتب الملاحظات هنا"></textarea>
+                    </div>
+                    <hr />
+                    <button type="submit" class="btn btn-primary ms-2 @disabled">
+                        <i class="fa-solid fa-plus fa-fw me-2"></i> حفظ الفحص
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>

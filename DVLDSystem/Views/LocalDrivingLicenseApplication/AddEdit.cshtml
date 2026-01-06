@@ -1,0 +1,194 @@
+﻿
+@model LocalDrivingLicenseApplicationVM
+
+@{
+    ViewData["Title"] = Model.LocalDrivingLicenseApplication.Id == 0 ? "أضافة طلب" : "تعديل الطلب";
+
+    string ErrorMessage = TempData["ErrorMessage"] as string;
+    bool ShowErrorModal = !string.IsNullOrEmpty(ErrorMessage);
+    string ActinoType = string.Empty;
+    bool IsAdditionMode = (Model.LocalDrivingLicenseApplication.Id == 0);
+    if (IsAdditionMode)
+    {
+        ActinoType = "أضافة";
+    }
+    else
+    {
+        ActinoType = "تعديل";
+    }
+}
+
+<div class="main-content mb-3">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> @ActinoType الطلب </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="LocalDrivingLicenseApplication" asp-action="Index">قائمة الطلبات</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ActinoType الطلب</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+        <partial name="_ErrorMessage" model="@ErrorMessage" />
+        <div class="row g-0">
+            <ul class="nav nav-pills mb-3 p-3 bg-white" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-PersonInfo-tab" data-bs-toggle="pill" data-bs-target="#pills-PersonInfo" type="button" role="tab" aria-controls="pills-PersonInfo" aria-selected="true">معلومات الشخص</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-LoginInfo-tab" data-bs-toggle="pill" data-bs-target="#pills-LoginInfo" type="button" role="tab" aria-controls="pills-LoginInfo" aria-selected="false">معلومات الطلب</button>
+                </li>
+            </ul>
+            <div class="tab-content p-0" id="pills-tabContent">
+                <div class="tab-pane fade show active personCardWithFilter" id="pills-PersonInfo" role="tabpanel" aria-labelledby="pills-PersonInfo-tab">
+                    <div class="col-12">
+                        <partial name="_PersonCardWithFilter" model="@Model.LocalDrivingLicenseApplication.Person" />
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-LoginInfo" role="tabpanel" aria-labelledby="pills-LoginInfo-tab">
+                    <div class="col-12 shadow mt-3 bg-white p-3">
+                        <form id="localDrivingLicenseAppForm" method="post" class="disabled">
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.Id" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.PersonId" id="selectedPersonId" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.ApplicationDate" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.LastStatusDate" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.ApplicationStatus" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.CreatedByUserId" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.ApplicationTypeId" hidden />
+                            <input asp-for="@Model.LocalDrivingLicenseApplication.PaidFees" hidden />
+                            <table>
+                                <tr>
+                                    <td class="p-2 mb-2">
+                                        <label class="me-2 fw-bold"><i class="fa-solid fa-hashtag fa-fw me-2"></i> معرف الطلب :</label>
+                                        <span>@(Model.LocalDrivingLicenseApplication == null ? "???" : Model.LocalDrivingLicenseApplication.Id == 0 ? "???" : Model.LocalDrivingLicenseApplication.Id)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 mb-2">
+                                        <label class="me-2 fw-bold"><i class="fa-solid fa-calendar-days fa-fw me-2"></i> تاريخ الطلب :</label>
+                                        <span>@(Model.LocalDrivingLicenseApplication == null ? "???" : Model.LocalDrivingLicenseApplication.ApplicationDate.ToShortDateString())</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 mb-2 d-flex align-items-center">
+                                        <label class="me-2 fw-bold text-nowrap"><i class="fa-solid fa-id-card fa-fw me-2"></i> فئة الرخصة :</label>
+                                        <div>
+                                            <select id="licenseClass" asp-for="@Model.LocalDrivingLicenseApplication.LicenseClassId" asp-items="@Model.LicenseClasses" class="form-control d-inline-block">
+                                                <option selected disabled>__أختر فئة الرخصة__</option>
+                                            </select>
+                                            <span asp-validation-for="@Model.LocalDrivingLicenseApplication.LicenseClassId" class="text-danger"></span>
+                                        </div>
+                                   </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 mb-2">
+                                        <label class="me-2 fw-bold"><i class="fa-solid fa-sack-dollar fa-fw me-2"></i>رسوم الطلب :</label>
+                                        <span>@(Model.LocalDrivingLicenseApplication == null ? "???" : Model.LocalDrivingLicenseApplication.PaidFees)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 mb-2">
+                                        <label class="me-2 fw-bold"><i class="fa-solid fa-user fa-fw me-2"></i>منشى بواسطة :</label>
+                                        <span>@(Model.LocalDrivingLicenseApplication == null ? "???" : Model.LocalDrivingLicenseApplication.User.UserName)</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <button id="saveLocalLicenseApp" type="submit" class="btn btn-primary my-3 ms-2"><i class="fa-solid fa-floppy-disk me-2"></i> حفظ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var showErrorModal = @ShowErrorModal.ToString().ToLower();
+
+            if (showErrorModal == true) {
+                $('#errorModal').modal('show');
+            };
+
+            var isAdditionMode = @IsAdditionMode.ToString().ToLower();
+            if (!isAdditionMode) {
+                $("#localDrivingLicenseAppForm").removeClass('disabled');
+                $(".personCardWithFilter").addClass('disabled');
+            }
+        });
+    </script>
+    <script>
+        function searchPerson() {
+            var getBy = $("#GetBy").val().trim();
+            var searchValue = $("#SearchValue").val().trim();
+
+            if (!searchValue) {
+                $("#errorMessage").text("يرجى إدخال قيمة البحث أولاً.");
+                $('#errorModal').modal('show');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Get", "Person")',
+                method: 'GET',
+                data: { GetBy: getBy, SearchValue: searchValue },
+                success: function (data, textStatus, xhr) {
+                    if (xhr.status === 200 && data.trim() !== "") {
+                        $('#personCardContainer').html(data);
+                        SetPersonId();
+                        EnableLocalDrivingLicenseForm();
+                    } 
+                    else {
+                        $.get('@Url.Action("EmptyPersonCard", "Person")', function (partial) {
+                            $('#personCard').html(partial);
+                        });
+                        $("#errorMessage").text("لا يوجد شخص مطابق للبيانات المدخلة.");
+                        $('#errorModal').modal('show');
+                    }
+                    
+                },
+                error: function (xhr) {
+                    if (xhr.status === 404) {
+                        $.get('@Url.Action("EmptyPersonCard", "Person")', function (partial) {
+                            $('#personCard').html(partial);
+                        });
+                        $("#errorMessage").text("حدث خطأ! الشخص غير موجود.");
+                    } else {
+                        $("#errorMessage").text("حدث خطأ أثناء البحث عن الشخص. يرجى المحاولة لاحقًا.");
+                    }
+
+                    $("#issuedUsingLocalLicenseId").text('???');
+                    $('#errorModal').modal('show');
+
+                    DisableLocalDrivingLicenseForm();
+                }
+            });
+        }
+
+        function SetPersonId() {
+            const personId = $("#personId").data("personid");
+            $("#selectedPersonId").val(personId);
+        }
+        function EnableLocalDrivingLicenseForm(){
+            $("#localDrivingLicenseAppForm").removeClass('disabled');
+        }
+        function DisableLocalDrivingLicenseForm() {
+            $("#localDrivingLicenseAppForm").addClass('disabled');
+        }
+
+        // Bind click to search button
+        $('#searchBtn').on('click', searchPerson);
+
+        // Allow pressing Enter to search
+        $('#searchValue').on('keypress', function (e) {
+            if (e.which === 13) { // Enter key
+                searchPerson();
+            }
+        });
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+}

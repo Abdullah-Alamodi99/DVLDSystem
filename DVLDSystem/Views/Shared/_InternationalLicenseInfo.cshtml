@@ -1,0 +1,72 @@
+﻿@model InternationalLicense
+
+<div class="card shadow border-0 mt-3 position-relative">
+    <div class="card-header bg-primary p-3">
+        <h5 class="text-white mb-0">رخصة قيادة دولية</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="row align-items-center p-3">
+            <div class="col-md-5">
+                <div class="mb-3">
+                    <i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">أسم الشخص : </label>
+                    <span class="text-primary fw-semibold">@Model.Driver.Person.FullName</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">رقم الرخصة الدولية : </label>
+                    <span>@Model.Id</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">رقم الرخصة المحلية : </label>
+                    <span>@Model.IssuedUsingLocalLicenseId</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">الرقم الوطني : </label>
+                    <span>@Model.Driver.Person.NationalNo</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-person-half-dress fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">الجنس : </label>
+                    <span>@(Model.Driver.Person.Gender == 0 ? "ذكر" : "أنثى")</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">تاريخ الإصدار : </label>
+                    <span>@Model.IssueDate.ToShortDateString()</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">رقم الطلب : </label>
+                    <span>@Model.Id</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">الرخصة نشطة : </label>
+                    <span>@(Model.IsActive ? "نعم" : "لا")</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">تاريخ الميلاد : </label>
+                    <span>@Model.Driver.Person.DateOfBirth.ToShortDateString()</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">معرف السائق : </label>
+                    <span>@Model.DriverId</span>
+                </div>
+                <div class="mb-3">
+                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                    <label class="fw-semibold">تاريخ انتهاء الصلاحية : </label>
+                    <span>@Model.ExpirationDate.ToShortDateString()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <img class="license-background" src="/images/License/License-background.png" loading="lazy" />
+</div>

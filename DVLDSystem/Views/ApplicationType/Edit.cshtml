@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "تعديل الطلب";
+}
+@model ApplicationType
+
+<div class="main-content pb-5">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-0">تعديل الطلب</h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-controller="ApplicationType" asp-action="Index">قائمة الطلبات</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">تعديل الطلب</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+
+        <div class="page-content bg-white rounded py-3 px-4 shadow">
+            <form method="post">
+                <div class="row">
+                    <div class="mb-3 col-12 col-md-6">
+                        <label asp-for="Title" class="p-0 mb-1">العنوان</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        <label asp-for="Fees" class="p-0 mb-1">الرسوم</label>
+                        <input asp-for="Fees" type="number" class="form-control" />
+                        <span asp-validation-for="Fees" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-md-2 mt-2">
+                        <button type="submit" class="btn btn-primary form-control">
+                            <i class="fa-solid fa-pencil me-1"></i> تعديل
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,99 @@
+﻿@model Person
+
+@if (Model != null)
+{
+    <div id="personCard" class="card bg-white rounded border-0 mb-4 shadow-sm">
+     
+        <div class="card-header bg-primary text-white p-3">
+            <h5 class="mb-0">بيانات الشخص</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-4 align-items-center">
+                <!-- Person Details -->
+                <div class="col-12 col-md-8 col-lg-9">
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-hashtag me-2"></i>
+                            <label class="fw-semibold">رقم الشخص:</label>
+                            <span>@Model.Id</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-person me-2"></i>
+                            <label class="fw-semibold">الاسم:</label>
+                            <span class="text-primary">@Model.FullName</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-id-card me-2"></i>
+                            <label class="fw-semibold">الرقم الوطني:</label>
+                            <span>@Model.NationalNo</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-calendar-days me-2"></i>
+                            <label class="fw-semibold">تاريخ الميلاد:</label>
+                            <span>@Model.DateOfBirth.ToShortDateString()</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-person-half-dress me-2"></i>
+                            <label class="fw-semibold">الجنس:</label>
+                            <span>@(Model.Gender == 0 ? "ذكر" : "أنثى")</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-mobile-retro me-2"></i>
+                            <label class="fw-semibold">الهاتف:</label>
+                            <span>@Model.Phone</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-envelope me-2"></i>
+                            <label class="fw-semibold">البريد الإلكتروني:</label>
+                            <span>@Model.Email</span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <i class="fa-solid fa-globe me-2"></i>
+                            <label class="fw-semibold">الدولة:</label>
+                            <span>@Model.Country?.Name</span>
+                        </div>
+
+                        <div class="col-12">
+                            <i class="fa-solid fa-address-book me-2"></i>
+                            <label class="fw-semibold">العنوان:</label>
+                            <span>@Model.Address</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Person Image -->
+                <div class="col-12 col-md-4 col-lg-3 text-center">
+                    <a asp-controller="Person" asp-action="AddEdit" asp-route-Id="@Model.Id"
+                       class="d-block text-primary mb-2 text-decoration-none">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> تعديل بيانات الشخص
+                    </a>
+
+                    <div class="border p-2 rounded shadow-sm bg-light">
+                        @{
+                            string imgPath = !string.IsNullOrEmpty(Model.ImageUrl)
+                            ? $"/images/person/{Model.ImageUrl}"
+                            : (Model.Gender == 0
+                            ? "/images/person-placeholder/Male.png"
+                            : "/images/person-placeholder/Female.png");
+                        }
+                        <img src="@imgPath" id="imagePreview" class="img-fluid rounded" loading="lazy" alt="صورة الشخص" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <span id="personId" data-personId="@Model.Id" data-existforuser="@Model.IsPersonExitForUser" hidden></span>
+    </div>
+}
+else
+{
+    <partial name="_EmptyPersonCard" />
+}

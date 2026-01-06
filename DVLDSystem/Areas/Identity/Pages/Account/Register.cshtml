@@ -1,0 +1,212 @@
+﻿@page
+@using DVLD.Models
+@model RegisterModel
+@{
+    ViewData["Title"] = "التسجيل";
+}
+
+<div class="main-content mb-3">
+    <div class="container">
+        <partial name="_ErrorMessage" model="string.Empty" />
+
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-0"> أضافة مستخدم </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index">المستخدمين</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">أضافة مستخدم</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+        <div class="row">
+            <ul class="nav nav-pills p-3 mb-3 bg-white" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-PersonInfo-tab" data-bs-toggle="pill" data-bs-target="#pills-PersonInfo" type="button" role="tab" aria-controls="pills-PersonInfo" aria-selected="true">معلومات الشخص</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-LoginInfo-tab" data-bs-toggle="pill" data-bs-target="#pills-LoginInfo" type="button" role="tab" aria-controls="pills-LoginInfo" aria-selected="false">معلومات تسجيل الدخول</button>
+                </li>
+            </ul>
+            <div class="tab-content p-0" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-PersonInfo" role="tabpanel" aria-labelledby="pills-PersonInfo-tab">
+                    <div class="col-12">
+                        <partial name="_PersonCardWithFilter" model="@Model.Person" />
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-LoginInfo" role="tabpanel" aria-labelledby="pills-LoginInfo-tab">
+                    <div class="container">
+                        <div class="d-lg-flex justify-content-center">
+                            <div class="col-md-8 col-lg-5 shadow bg-white p-3 text-center justify-content-center mx-auto">
+                                <div class="text-center mb-4">
+                                    <img src="/images/logo/DVLD Logo.png" class="brand-img" alt="Logo" loading="lazy" />
+                                    <h5>أنشاء حساب جديد</h5>
+                                </div>
+                                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="disabled" novalidate="novalidate">
+                                    <div class="form-floating mb-3">
+                                        <input id="userName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" type="text" data-val="true" data-val-required="أسم المستخدم مطلوب" name="Input.UserName" value="">
+                                        <label for="Input_UserName">أسم المستخدم</label>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="Input.UserName" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <input id="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-length="يجب أن يكون كلمة المرور مكونًا من 6 حرف على الأقل و 100 حرف كحد أقصى." data-val-length-max="100" data-val-length-min="6" data-val-required="كلمة المرور مطلوبة" maxlength="100" name="Input.Password">
+                                        <label for="Input_Password">كلمة المرور</label>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <input id="confirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-equalto="كلمة المرور وتأكيد كلمة المرور غير متطابقتان." data-val-equalto-other="*.Password" name="Input.ConfirmPassword">
+                                        <label for="Input_ConfirmPassword">تأكيد كلمة المرور</label>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="Input.ConfirmPassword" data-valmsg-replace="true"></span>
+                                    </div>
+                                    @if (User.IsInRole(SD.Role_Admin))
+                                    {
+                                        <div class="form-floating mb-3">
+                                            <select id="roleSelect" asp-for="@Model.Input.Role" asp-items="@Model.Input.RoleList" class="form-select pt-0 pb-0">
+                                                <option disabled selected>__أختر الدور__</option>
+                                            </select>
+                                        </div>
+                                    }
+
+                                    <input type="hidden" id="selectedPersonId" data-val="true" data-val-required="The PersonId field is required." name="Input.PersonId" value="">
+                                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">تسجيل</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function searchPerson() {
+            var getBy = $("#GetBy").val().trim();
+            var searchValue = $("#SearchValue").val().trim();
+
+            if (!searchValue) {
+                $("#errorMessage").text("يرجى إدخال قيمة البحث أولاً.");
+                $('#errorModal').modal('show');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Get", "Person")',
+                method: 'GET',
+                data: { GetBy: getBy, SearchValue: searchValue },
+                success: function (data, textStatus, xhr) {
+                    if (xhr.status === 200 && data.trim() !== "") {
+                        $('#personCardContainer').html(data);
+                        SetPersonId();
+                        var existForUser = $("#personId").attr("data-existforuser");
+                        if (existForUser === 'True') {
+                            DisableRegisterForm();
+                            $("#errorMessage").text("الشخص المختار مرتبط بمستخدم بالفعل, أختر شخص اخر.");
+                            $('#errorModal').modal('show');
+                        }
+                        else {
+                            EnableRegisterForm();
+                        }
+                    }
+                    else {
+                        $.get('@Url.Action("EmptyPersonCard", "Person")', function (partial) {
+                            $('#personCard').html(partial);
+                        });
+                        $("#errorMessage").text("لا يوجد شخص مطابق للبيانات المدخلة.");
+                        $('#errorModal').modal('show');
+                    }
+
+                },
+                error: function (xhr) {
+                    if (xhr.status === 404) {
+                        $.get('@Url.Action("EmptyPersonCard", "Person")', function (partial) {
+                            $('#personCard').html(partial);
+                        });
+                        $("#errorMessage").text("حدث خطأ! الشخص غير موجود.");
+                    } else {
+                        $("#errorMessage").text("حدث خطأ أثناء البحث عن الشخص. يرجى المحاولة لاحقًا.");
+                    }
+
+                    $("#issuedUsingLocalLicenseId").text('???');
+                    $('#errorModal').modal('show');
+                }
+            });
+        }
+
+        // function searchPerson() {
+        //     var getBy = document.getElementById('GetBy').value;
+        //     var searchValue = document.getElementById('SearchValue').value;
+        //     $.ajax({
+        //         url: '@Url.Action("Get", "Person")',
+        //         method: 'GET',
+        //         data: { GetBy: getBy, SearchValue: searchValue },
+        //         success: function (data) {
+        //             $('#personCardContainer').html(data);
+        //             SetPersonId();
+        //             var existForUser = $("#personId").attr("data-existforuser");
+        //             if (existForUser === 'True') {
+        //                 DisableRegisterForm();
+        //                 ShowMessage();
+        //             }
+        //             else {
+        //                 EnableRegisterForm();
+        //             }
+                    
+        //         },
+        //         error: function () {
+        //             $('#personCardContainer').html('<p>الشخص غير موجود</p>');
+        //         }
+        //     });
+
+        //     $('#searchForm').submit(function (event) {
+        //         event.preventDefault();
+        //     });
+
+            
+            
+        // }
+
+        function SetPersonId(){
+            const personId = $("#personId").data("personid");
+            $("#selectedPersonId").val(personId);
+        }
+
+        function DisableRegisterForm() {
+            $("#registerForm").addClass('disabled');
+            
+        }
+
+        function EnableRegisterForm() {
+            $("#registerForm").removeClass('disabled');
+        }
+        
+        function ShowMessage(){
+            var paragraphForMessage = $('<p>', {
+                text: 'الشخص المختار مرتبط بمستخدم بالفعل, أختر شخص اخر.',
+                class: 'text-danger'
+            });
+            $("#personCard").prepend(paragraphForMessage);
+        }
+
+        // Bind click to search button
+        $('#searchBtn').on('click', searchPerson);
+
+        // Allow pressing Enter to search
+        $('#searchValue').on('keypress', function (e) {
+            if (e.which === 13) { // Enter key
+                searchPerson();
+            }
+        });
+
+    </script>
+}

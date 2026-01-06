@@ -1,0 +1,16 @@
+﻿@model License
+
+<div class="card border-1">
+    <div class="card-body">
+        <div class="Filter d-flex">
+            <form id="searchForm" class="get d-flex align-items-center">
+                <label class="text-nowrap me-2 fw-semibold">رقم الرخصة المحلية : </label>
+                <input type="text" id="searchValue" class="form-control d-inline-block" />
+                <button id="btnSearch" type="submit" class="btn btn-primary ms-2" onclick="searchLocalLicense()">بحث</button>
+            </form>
+        </div>
+        <div id="licenseCard">
+            <partial name="_LicenseInfo" model="Model" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿<div id="personCard" class="card bg-white rounded border-0 mb-4 shadow">
+    <div class="card-header bg-primary text-white p-3">
+        <h5 class="mb-0">بيانات الشخص</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="row g-4 align-items-center">
+            <div class="col-12 col-md-8 col-lg-9">
+                <div class="row g-3">
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-hashtag me-2"></i> رقم الشخص: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-person me-2"></i> الاسم: <span class="text-primary">???</span></div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-id-card me-2"></i> الرقم الوطني: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-calendar-days me-2"></i> تاريخ الميلاد: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-person-half-dress me-2"></i> الجنس: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-mobile-retro me-2"></i> الهاتف: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-envelope me-2"></i> البريد الإلكتروني: ???</div>
+                    <div class="col-12 col-sm-6"><i class="fa-solid fa-globe me-2"></i> الدولة: ???</div>
+                    <div class="col-12"><i class="fa-solid fa-address-book me-2"></i> العنوان: ???</div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-3 text-center">
+                <a asp-controller="Person" asp-action="AddEdit"
+                   class="d-block text-primary mb-2 text-decoration-none disabled">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> تعديل بيانات الشخص
+                </a>
+
+                <div class="border p-2 rounded shadow-sm bg-light">
+                    <img src="/images/person-placeholder/Male.png" loading="lazy" id="genderImg" class="img-fluid rounded" alt="صورة افتراضية" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span id="personId" data-personId="0" hidden></span>
+</div>

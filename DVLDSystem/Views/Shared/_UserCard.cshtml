@@ -1,0 +1,22 @@
+﻿@model ApplicationUser
+
+<partial name="_PersonCard" model="@Model.Person" />
+<div class="card bg-white rounded border-0">
+    <div class="card-header p-3 bg-primary">
+        <h5 class="text-white mb-0">معلومات تسجيل الدخول</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <span class="col-12 col-md-5 py-2"><i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i> المعرٌف: @Model.Id</span>
+            <span class="col-12 col-md-4 py-2 text-lg-center"><i class="fa-solid fa-user fa-fw fa-lg me-2 icon-primary"></i> أسم المستخدم: @Model.UserName</span>
+            @if (Model.IsActive)
+            {
+                <span class="col-12 col-md-3 py-2 text-lg-end"><input type="checkbox" checked class="input-checkbox-disabled me-2" /> الحساب نشط : نعم</span>
+            }
+            else
+            {
+                <span class="col-12 col-md-3 py-2 text-lg-end"><input type="checkbox" class="input-checkbox-disabled me-2" /> الحساب نشط : لا</span>
+            }
+        </div>
+    </div>
+</div>

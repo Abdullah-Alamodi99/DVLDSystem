@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "السائقين";
+}
+
+<div class="main-content">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> السائقين </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="Driver" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">السائقين</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== table ====*@
+        <table id="tblData" class="table table-striped table-borderless nowrap pt-1 w-100">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>رقم السائق</th>
+                    <th>رقم الشخص</th>
+                    <th>الرقم الوطني</th>
+                    <th>الاسم كامل</th>
+                    <th>تاريخ إنشاء السائق</th>
+                    <th> الرخص النشطة </th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/js/driver.js"></script>
+}

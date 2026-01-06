@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - إدارة ترخيص السائقين والمركبات</title>
+
+    <!-- Bootstrap RTL -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+
+    <!-- DataTable -->
+    <link rel="stylesheet" href="~/lib/datatables/css/datatables.min.css" />
+@*     <link rel="stylesheet" href="~/DVLDSystem.styles.css" asp-append-version="true" /> *@
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/lib/toastr/dist/css/toastr.min.css" />
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body class="d-flex flex-column">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary border-bottom box-shadow mb-3 p-md-3 fixed-top">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold d-flex align-items-center me-2" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/images/logo/DVLD Logo.png" class="brand-img" alt="Logo" />
+                </a>
+
+                <!-- Toggle button -->
+                <button class="navbar-toggler text-white ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars fa-lg"></i>
+                </button>
+
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse justify-content-start justify-content-lg-end" id="mainNavbar">
+                    <ul class="navbar-nav flex-wrap pe-3 pt-3 pe-lg-0 pt-lg-0">
+
+                        <!-- الرئيسية -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house fa-lg me-2"></i> الرئيسية
+                            </a>
+                        </li>
+
+                        <!-- الطلبات -->
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-id-card fa-lg me-2"></i> الطلبات
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+                                <!-- خدمات رخص القيادة -->
+                                <li class="dropdown-submenu position-relative">
+                                    <a class="dropdown-item dropdown-toggle text-dark" asp-area="" asp-controller="LocalDrivingLicenseApplication" asp-action="Index">
+                                        <i class="fa-solid fa-id-card fa-lg fa-fw me-2 icon-primary"></i> خدمات رخص القيادة
+                                    </a>
+                                    <ul class="dropdown-menu position-absolute top-0 start-100 mt-0">
+                                        <li class="dropdown-submenu position-relative">
+                                            <a class="dropdown-item dropdown-toggle text-dark" href="#">
+                                                <i class="fa-solid fa-id-card fa-lg fa-fw me-2 icon-primary"></i> طلب رخصة جديدة
+                                            </a>
+                                            <ul class="dropdown-menu position-absolute top-0 start-100 mt-0">
+                                                <li>
+                                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="LocalDrivingLicenseApplication" asp-action="AddEdit">
+                                                        <i class="fa-solid fa-address-card fa-lg fa-fw me-2 icon-primary"></i> رخصة قيادة محلية
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="InternationalLicense" asp-action="Issue">
+                                                        <i class="fa-solid fa-earth-americas fa-lg fa-fw me-2 icon-primary"></i> رخصة قيادة دولية
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="License" asp-action="RenewLicense">
+                                                <i class="fa-solid fa-id-card-clip fa-lg fa-fw me-2 icon-primary"></i> طلب تجديد الرخصة
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="License" asp-action="ReplacementLicense">
+                                                <i class="fa-solid fa-triangle-exclamation fa-lg fa-fw me-2 icon-primary"></i> طلب رخصة بدل فاقد أو تالف
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="DetainedLicense" asp-action="Release">
+                                                <i class="fa-solid fa-hand-holding fa-lg fa-fw me-2 icon-primary"></i> فك حجز الرخصة
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- إدارة الطلبات -->
+                                <li class="dropdown-submenu position-relative">
+                                    <a class="dropdown-item dropdown-toggle text-dark" href="#">
+                                        <i class="fa-solid fa-clipboard-list fa-lg fa-fw me-2 icon-primary"></i> إدارة الطلبات
+                                    </a>
+                                    <ul class="dropdown-menu position-absolute top-0 start-100 mt-0">
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="LocalDrivingLicenseApplication" asp-action="Index">
+                                                <i class="fa-solid fa-address-card fa-lg fa-fw me-2 icon-primary"></i> طلبات رخصة قيادة محلية
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="InternationalLicense" asp-action="Index">
+                                                <i class="fa-solid fa-earth-americas fa-lg fa-fw me-2 icon-primary"></i> طلبات رخصة قيادة دولية
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- الرخص المحجوزة -->
+                                <li class="dropdown-submenu position-relative">
+                                    <a class="dropdown-item dropdown-toggle text-dark" href="#">
+                                        <i class="fa-solid fa-hand fa-lg fa-fw me-2 icon-primary"></i> الرخص المحجوزة
+                                    </a>
+                                    <ul class="dropdown-menu position-absolute top-0 start-100 mt-0">
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="DetainedLicense" asp-action="Index">
+                                                <i class="fa-solid fa-hand fa-lg fa-fw me-2 icon-primary"></i> أدارة الرخص المحجوزة
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="DetainedLicense" asp-action="Detain">
+                                                <i class="fa-solid fa-hand fa-lg fa-fw me-2 icon-primary"></i> حجز رخصة
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="DetainedLicense" asp-action="Release">
+                                                <i class="fa-solid fa-hand-holding fa-lg fa-fw me-2 icon-primary"></i> فك حجز رخصة
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- إدارة أنواع الطلبات -->
+                                <li>
+                                    <a class="dropdown-item text-dark" asp-controller="ApplicationType" asp-action="Index">
+                                        <i class="fa-solid fa-file-lines fa-lg fa-fw me-2 icon-primary"></i> إدارة أنواع الطلبات
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- إدارة أنواع الاختبارات -->
+                                <li>
+                                    <a class="dropdown-item text-dark" asp-controller="TestType" asp-action="Index">
+                                        <i class="fa-solid fa-file-signature fa-lg fa-fw me-2 icon-primary"></i> إدارة أنواع الأختبارات
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <!-- الأشخاص -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Person" asp-action="Index">
+                                <i class="fa-solid fa-people-group fa-lg me-2"></i> الأشخاص
+                            </a>
+                        </li>
+
+                        <!-- السائقين -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Driver" asp-action="Index">
+                                <i class="fa-solid fa-id-card fa-lg me-2"></i> السائقين
+                            </a>
+                        </li>
+
+                        <!-- المستخدمين -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Index">
+                                <i class="fa-solid fa-user-group fa-lg me-2"></i> المستخدمين
+                            </a>
+                        </li>
+
+                        <!-- إدارة الحساب -->
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user-gear fa-lg me-2"></i> إدارة الحساب
+                            </a>
+                            <partial name="_LoginPartial" />
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow-1">
+        <partial name="_Notification" />
+        @RenderBody()
+    </main>
+
+    <footer id="mainFooter" class="border-top text-muted text-center line lh-sm py-3 mt-auto">
+        <div class="container">
+            <span class="d-block lh-sm mb-2">إدارة ترخيص السائقين والمركبات &copy; @DateTime.Now.Year</span>
+            <span class="lh-sm small text-primary fw-bold">تم التطوير بواسطة عبدالله العمودي</span>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/toastr/dist/js/toastr.min.js"></script>
+
+    <!-- Mobile-friendly submenu fix -->
+    <script src="~/js/dropdown-submenu-responsive.js"></script>
+    <script src="~/js/dropdown-submenu-interaction.js"></script>
+    <script src="~/js/site.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

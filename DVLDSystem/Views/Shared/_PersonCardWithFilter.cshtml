@@ -1,0 +1,49 @@
+﻿@model Person
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div id="personFilter" class="filter mb-3">
+            <form method="get" onsubmit="return false;" class="row g-3 align-items-center" id="searchForm">
+
+                <!-- Search by -->
+                <div class="col-12 col-md-4">
+                    <div class="d-flex flex-column flex-md-row align-items-md-center">
+                        <label for="GetBy" class="text-nowrap me-md-2 mb-1 mb-md-0 fw-semibold">أيجاد ب :</label>
+                        <select class="form-control" id="GetBy">
+                            <option value="Id">الرقم التعريفي</option>
+                            <option value="NationalNo">الرقم الوطني</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Search value + buttons -->
+                <div class="col-12 col-md-8">
+                    <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
+                        <!-- Search input -->
+                        <input type="text"
+                               id="SearchValue"
+                               name="SearchValue"
+                               class="form-control flex-grow-1"
+                               placeholder="أدخل القيمة للبحث..."
+                               value="@(Model != null && Model.Id != 0 ? Model.Id.ToString() : string.Empty)" />
+
+                        <!-- Buttons container -->
+                        <div class="d-flex gap-2 justify-content-start justify-content-lg-end">
+                            <button id="searchBtn" type="submit" class="btn btn-primary px-4">بحث</button>
+                            <a asp-area="" asp-controller="Person" asp-action="AddEdit"
+                               class="btn btn-secondary text-nowrap px-4">
+                                <i class="fa-solid fa-person-circle-plus"></i> أضافة شخص
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Person card -->
+        <div id="personCardContainer">
+            <partial name="_PersonCard" model="Model" />
+        </div>
+    </div>
+</div>

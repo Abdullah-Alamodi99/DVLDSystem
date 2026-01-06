@@ -1,0 +1,138 @@
+﻿@model LicenseOperationVM
+
+@{
+    ViewData["Title"] = "تجديد الرخصة";
+
+    string? ErrorMessage = TempData["ErrorMessage"] as string;
+    bool CanRenew = ViewBag.CanIssueForOperation;
+    bool ShowErrorModal = !string.IsNullOrEmpty(ErrorMessage);
+    string disabled = !CanRenew ? "disabled" : "";
+}
+
+<div class="main-content my-3 my-lg-4">
+    <div class="container">
+        <div class="bg-white p-3">
+            <partial name="_ErrorMessage" model="@ErrorMessage" />
+            <form asp-action="SearchLocalLicense" id="searchForm" class="get row align-items-center justify-content-between gy-3 gx-0">
+                <input type="hidden" name="OperationType" value="@LicenseOperationVM.enLicenseOperationType.Renew" />
+                <!-- Search input + button -->
+                <div class="col-12 col-lg-6 d-flex flex-column flex-lg-row align-items-lg-center">
+                    <label class="fw-semibold me-lg-2 mb-2 mb-lg-0 text-nowrap">رقم الرخصة المحلية:</label>
+                    <div class="d-flex flex-grow-1">
+                        <input type="text" id="searchValue" name="OldLicenseId" class="form-control me-2" />
+                        <button id="btnSearch" type="submit" class="btn btn-primary">بحث</button>
+                    </div>
+                </div>
+            </form>
+            <partial name="_LicenseInfo" model="@Model.OldLicense" />
+            <div class="border-0 mt-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">معلومات الطلب</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">تاريخ الطلب : </label>
+                                <span>@Model.NewLicense.Application.ApplicationDate.ToShortDateString()</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">تاريخ الإصدار : </label>
+                                <span>@Model.NewLicense.IssueDate.ToShortDateString()</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-coins fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">رسوم الطلب : </label>
+                                <span>@Model.NewLicense.Application.PaidFees</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-coins fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">رسوم الرخصة : </label>
+                                <span>@(Model.NewLicense.PaidFees == 0 ? "???" : Model.NewLicense.PaidFees)</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fa-solid fa-hashtag fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">رقم الرخصة القديمة : </label>
+                                <span>@(Model.OldLicense == null ? "???" : Model.OldLicense.Id)</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">تاريخ الإنتهاء : </label>
+                                <span>@(Model.OldLicense == null ? "???" : Model.NewLicense.ExpirationDate.ToShortDateString())</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-user fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">من إنشاء : </label>
+                                <span>@Model.NewLicense.User.UserName</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa-solid fa-coins fa-fw fa-lg me-2"></i>
+                                <label class="fw-semibold">إجمالي الرسوم : </label>
+                                <span>@(Model.NewLicense == null ? "???" : Model.NewLicense.PaidFees + Model.NewLicense.Application.PaidFees)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <form method="post" asp-action="RenewLicense">
+                        @* Old License Hidden Fields *@
+                        <input asp-for="OldLicense.Id" hidden />
+                        <input asp-for="OldLicense.IssueDate" hidden />
+                        <input asp-for="OldLicense.ExpirationDate" hidden />
+                        <input asp-for="OldLicense.LicenseClassId" hidden />
+                        <input asp-for="OldLicense.CreatedByUserId" hidden />
+                        <input asp-for="OldLicense.IssueReason" hidden />
+                        <input type="checkbox" asp-for="OldLicense.IsActive" hidden />
+                        <input asp-for="OldLicense.ApplicationId" hidden />
+                        <input asp-for="OldLicense.DriverId" hidden />
+                        <input asp-for="OldLicense.PaidFees" hidden />
+
+                        @* New License Hidden Fields *@
+                        <input asp-for="NewLicense.Id" hidden />
+                        <input asp-for="NewLicense.IssueDate" hidden />
+                        <input asp-for="NewLicense.ExpirationDate" hidden />
+                        <input asp-for="NewLicense.LicenseClassId" hidden />
+                        <input asp-for="NewLicense.CreatedByUserId" hidden />
+                        <input asp-for="NewLicense.IssueReason" hidden />
+                        <input type="checkbox" asp-for="NewLicense.IsActive" hidden />
+                        <input asp-for="NewLicense.ApplicationId" hidden />
+                        <input asp-for="NewLicense.DriverId" hidden />
+                        <input asp-for="NewLicense.PaidFees" hidden />
+                        <input asp-for="NewLicense.Application.ApplicationDate" hidden />
+                        <input asp-for="NewLicense.Application.ApplicationStatus" hidden />
+                        <input asp-for="NewLicense.Application.LastStatusDate" hidden />
+                        <input asp-for="NewLicense.Application.PaidFees" hidden />
+                        <input asp-for="NewLicense.Application.PersonId" hidden />
+                        <input asp-for="NewLicense.Application.ApplicationTypeId" hidden />
+                        <input asp-for="NewLicense.Application.CreatedByUserId" hidden />
+
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-note-sticky fa-fw fa-lg me-2"></i>
+                            <label asp-for="@Model.NewLicense.Notes" class="fw-semibold text-nowrap me-2">ملاحظات</label>
+                            <textarea asp-for="@Model.NewLicense.Notes" class="form-control @disabled" placeholder="أكتب الملاحظات هنا"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3 @disabled">
+                            <i class="fa-solid fa-id-card fa-fw fa-lg me-2"></i> تجديد الرخصة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var showErrorModal = @ShowErrorModal.ToString().ToLower();
+
+            if (showErrorModal == true) {
+                $('#errorModal').modal('show');
+            };
+        });
+    </script>
+}

@@ -1,0 +1,341 @@
+/*=================== START CLASSES ===================*/
+.bg-primary {
+    background-color: #b66dff !important;
+}
+
+.icon-primary {
+    color: #060606b8;
+}
+
+.icon-secondary {
+    color: #5b5f62;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+    color: #333 !important;
+}
+
+.input-checkbox-disabled {
+    pointer-events: none;
+}
+
+.container-xm {
+    padding-left: 0 !important;
+    padding-right: !important;
+}
+
+.bg-danger {
+    background: #e85e6c !important;
+}
+
+.btn-danger {
+    background: #e85e6c !important;
+}
+
+.error-box {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 3px solid #fff;
+}
+
+.error-box .error-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+}
+
+.fw-semibold {
+    font-weight: 600;
+}
+/*=================== END CLASSES ===================*/
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+* {
+    text-decoration: none !important;
+    list-style: none !important;
+}
+
+ul {
+    padding: 0;
+}
+
+body {
+    background-color: #F3F4FE;
+    font-family: "Cairo", sans-serif;
+}
+
+.navbar-toggler {
+    border-color: #fff !important;
+    padding: 8px 13px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/*=================== DROPDOWN SUBMENU STYLING ===================*/
+.dropdown-submenu {
+    position: relative;
+}
+
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        right: 100%;
+        margin-top: -1px;
+    }
+
+    .dropdown-submenu.sechulde-tests .dropdown-menu {
+        left: 100%;
+        right: auto;
+    }
+
+@media (max-width: 767px) {
+    .dropdown-submenu .dropdown-menu {
+        padding-right: 10px;
+    }
+}
+
+@media (min-width: 767px) {
+    .dropdown-submenu .dropdown-toggle::after {
+        transform: rotate(90deg);
+    }
+}
+@media(max-width:991px){
+    ul.navbar-nav{
+        padding-right:10px;
+        padding-bottom:10px;
+    }
+}
+/*=================== END DROPDOWN SUBMENU STYLING ===================*/
+
+/*=================== DROPDOWN ITEMS STYLING ===================*/
+.dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #fff;
+}
+/*=================== END DROPDOWN ITEMS STYLING ===================*/
+
+/*=================== TABLE STYLING ===================*/
+.table-responsive {
+    font-size: 15px;
+    overflow-x: visible;
+}
+table thead th {
+    text-align: right !important;
+}
+@media (max-width: 767px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+.table-responsive table a {
+    font-size: 14px;
+}
+
+.table-responsive button.dropdown-toggle {
+    font-size: 14px;
+}
+
+.table-responsive .dataTables_wrapper {
+    overflow: visible !important;
+}
+
+table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+    .dataTables_wrapper .dataTables_filter {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+}
+
+.dataTables_filter input[type=search] {
+    margin-right: 7px;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li:last-child{
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+.dataTables_filter input[type=search]:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+}
+
+.table-responsive {
+    overflow-x: auto !important;
+}
+
+table.nowrap td,
+table.nowrap th {
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        text-align: right !important;
+    }
+}
+/*=================== END TABLE STYLING ===================*/
+
+header {
+    padding-bottom: 89px;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding-bottom: 75px;
+    }
+}
+
+.main-content {
+    padding-bottom: 71px;
+}
+
+@media (min-width: 992px) {
+    .main-content.login {
+        height: calc(100vh - 89px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.brand-img {
+    width: 50px;
+}
+
+.dropdown-menu {
+    z-index: 99999999;
+}
+#tblData {
+    width: 100% !important;
+    font-size: 14px;
+    font-weight: 600;
+}
+#tblData .dropdown-item {
+    font-size: 14px;
+    font-weight: 600;
+}
+table .dropdown-menu{
+    right:initial !important;
+}
+@media(min-width:1200px){
+    table .dropdown-menu {
+        right: 0 !important;
+    }
+}
+.license-background {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.1;
+    width: 250px;
+}
+
+table {
+    width: 100% !important;
+}
+
+/* Responsive gutters for small screens */
+@media (max-width: 576px) {
+    .row.no-gutter-sm {
+        --bs-gutter-x: 0 !important;
+    }
+}
+
+/* === Responsive Toastr Styles === */
+#toast-container > .toast {
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Position and width adjustments for different screens */
+#toast-container {
+    width: auto;
+    padding: 0 10px;
+}
+
+/* Small screens (phones) */
+@media (max-width: 576px) {
+    #toast-container > .toast {
+        width: 90% !important; /* Use most of the screen width */
+        max-width: none;
+        margin: 10px auto !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    #toast-container {
+        top: 1rem !important;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 577px) and (max-width: 991.98px) {
+    #toast-container > .toast {
+        width: 60% !important;
+        margin: 10px auto;
+    }
+}
+
+/* Large screens (desktop and above) */
+@media (min-width: 992px) {
+    #toast-container > .toast {
+        width: 350px;
+    }
+}
+.shadow-lg-lg {
+    box-shadow: none !important;
+}
+@media(min-width:992px){
+    .shadow-lg-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+    }
+}
+/* Mobile-friendly submenu */
+.drop-down-vertical {
+    position: static !important;
+    margin-left: 0 !important;
+    margin-top: 0.25rem;
+}

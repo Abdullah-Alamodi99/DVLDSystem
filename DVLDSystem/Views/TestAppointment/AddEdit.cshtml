@@ -1,0 +1,9 @@
+﻿@model TestAppointmentVM
+@{
+    ViewData["Title"] = Model.TestAppointment.Id == 0 ? "أصافة موعد الفحص" : "تعديل موعد الفحص";
+}
+<div class="main-content">
+    <div class="container">
+        <partial name="_ScheduleTest" model="@Model" />
+    </div>
+</div>

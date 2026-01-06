@@ -1,0 +1,64 @@
+﻿@model LocalDrivingLicenseApplication
+
+<div class="card bg-white rounded border-0 mb-3">
+    <div class="card-header bg-primary p-3">
+        <h6 class="text-white mb-0">معلومات طلب رخصة القيادة</h6>
+    </div>
+    <div class="card-body">
+        <div class="row gy-2 align-items-center">
+            <div class="col-12 col-md-3 d-flex align-items-center">
+                <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                <span><span class="fw-semibold">المعرّف :</span> @Model.Id</span>
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center flex-grow-1">
+                <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                <span><span class="fw-semibold">الرخصة المطلوبة :</span> @Model.LicenseClass.Name</span>
+            </div>
+            <div class="col-12 col-md-3 text-md-end text-start mt-2 mt-md-0">
+                @if(Model.ApplicationStatus == (byte)Application.enStatus.Completed)
+                {
+                    <a asp-controller="License" asp-action="LicenseInfoByApplicationId" asp-route-ApplicationId="@Model.Id" class="text-primary">
+                        <i class="fa-solid fa-eye fa-fw fa-lg me-1"></i> عرض الرخصة
+                    </a>
+                }
+                else
+                {
+                    <a href="#" class="disabled text-primary">
+                        <i class="fa-solid fa-eye fa-fw fa-lg me-1"></i> عرض الرخصة
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card bg-white rounded border-0">
+    <div class="card-header bg-primary p-3">
+        <h6 class="text-white mb-0">معلومات الطلب الرئيسي</h6>
+    </div>
+    <div class="card-body">
+        <div class="row gy-3">
+            <!-- Left side info -->
+            <div class="col-12 col-md-8 d-flex flex-column gap-2">
+                <span class="pb-2"><i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">المعرّف :</span> @Model.Id</span>
+                <span class="pb-2"><i class="fa-solid fa-chart-pie fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">حالة الطلب :</span> @Model.StatusAsString</span>
+                <span class="pb-2"><i class="fa-solid fa-coins fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">الرسوم :</span> @Model.PaidFees</span>
+                <span class="pb-2"><i class="fa-solid fa-keyboard fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">نوع الطلب :</span> @Model.ApplicationType.Title</span>
+                <span class="pb-2"><i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">المتقدّم :</span> <span class="fw-semibold text-primary">@Model.Person.FullName</span></span>
+            </div>
+
+            <!-- Right side info -->
+            <div class="col-12 col-md-4 d-flex flex-column gap-2">
+                <span class="pb-2"><i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">التاريخ: </span><span dir="ltr">@Model.ApplicationDate.ToString("yyyy-MM-dd hh:mm tt")</span></span>
+                <span class="pb-2"><i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">تاريخ حالة الطلب: </span><span dir="ltr">@Model.LastStatusDate.ToString("yyyy-MM-dd hh:mm tt")</span> </span>
+                <span class="pb-2"><i class="fa-solid fa-user fa-fw fa-lg me-2 icon-primary"></i> <span class="fw-semibold">من إنشاء :</span> @Model.User.UserName</span>
+
+                <div class="mt-3">
+                    <a asp-controller="Person" asp-action="Card" asp-route-id="@Model.Person.Id" class="btn btn-primary w-100">
+                        <i class="fa-regular fa-id-card fa-fw fa-lg me-2"></i> عرض معلومات الشخص
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

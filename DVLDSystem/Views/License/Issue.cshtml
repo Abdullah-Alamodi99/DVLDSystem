@@ -1,0 +1,58 @@
+﻿
+@model LicenseVM
+
+@{
+    ViewData["Title"] = "اصدار رخصة محلية";
+    string ErrorMessage = TempData["ErrorMessage"] as string;
+    bool ShowErrorModal = !string.IsNullOrEmpty(ErrorMessage);
+}
+
+<div class="main-content my-3 my-lg-4">
+    <div class="container">
+        <partial name="_ErrorMessage" model="@ErrorMessage" />
+        <div class="bg-white p-3 shadow">
+            <div class="application-info">
+                <partial name="_DrivingLicenseApplicationInfo" model="@Model.LocalDrivingLicenseApplication" />
+            </div>
+            <hr class="mx-3" />
+            <div class="card border-0">
+                <div class="card-body">
+                    <form method="post">
+                        <input asp-for="@Model.License.Id" hidden />
+                        <input asp-for="@Model.License.IssueDate" hidden />
+                        <input asp-for="@Model.License.ExpirationDate" hidden />
+                        <input asp-for="@Model.License.PaidFees" hidden />
+                        <input type="checkbox" asp-for="@Model.License.IsActive" hidden />
+                        <input asp-for="@Model.License.IssueReason" hidden />
+                        <input asp-for="@Model.License.ApplicationId" hidden />
+                        <input asp-for="@Model.License.DriverId" hidden />
+                        <input asp-for="@Model.License.LicenseClassId" hidden />
+                        <input asp-for="@Model.License.CreatedByUserId" hidden />
+                        <input asp-for="@Model.LocalDrivingLicenseApplication.PersonId" hidden />
+                        <div class="form-group">
+                            <label asp-for="@Model.License.Notes" class="mb-2">
+                                <i class="fa-solid fa-note-sticky fa-fw fa-lg me-2"></i> ملاحظات
+                            </label>
+                            <textarea asp-for="@Model.License.Notes" class="form-control"></textarea>
+                        </div>
+                        <button class="btn btn-primary mt-3" type="submit">
+                            <i class="fa-solid fa-id-card fa-fw fa-lg me-2"></i> أصدار الرخصة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var showErrorModal = @ShowErrorModal.ToString().ToLower();
+
+            if (showErrorModal == true) {
+                $('#errorModal').modal('show');
+            };
+        });
+    </script>
+}

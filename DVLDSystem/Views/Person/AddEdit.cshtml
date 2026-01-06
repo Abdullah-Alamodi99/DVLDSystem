@@ -1,0 +1,168 @@
+﻿@model Person
+
+@{
+    string ActionType = Model.Id == 0 ? "أضافة" : "تعديل";
+    ViewData["Title"] = $"شخص {ActionType}";
+    if (Model.ImageUrl == null)
+    {
+        Model.ImageUrl = "";
+    }
+}
+
+<div class="main-content mb-3">
+    <div class="container-fluid">
+        <!-- ==== page header ==== -->
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-2 mb-md-0">@ActionType شخص</h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-controller="Person" asp-action="Index">قائمة الاشخاص</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ActionType شخص</li>
+                </ol>
+            </div>
+        </div>
+        <!-- ==== page header ==== -->
+
+        <div class="page-content bg-white rounded py-3 px-4 shadow">
+            <form method="post" enctype="multipart/form-data">
+                <input asp-for="Id" hidden />
+                <input asp-for="ImageUrl" hidden />
+
+                <div class="row no-gutter-sm">
+                    <!-- Left form section -->
+                    <div class="col-12 col-lg-10 row no-gutter-sm">
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="NationalNo" class="p-0 mb-1">الرقم الوطني</label>
+                            <input asp-for="NationalNo" class="form-control rounded-3"
+                                   maxlength="10"
+                                   inputmode="numeric"
+                                   pattern="^[12]\d{9}$"
+                                   title="الرقم الوطني يجب أن يتكون من 10 أرقام ويبدأ بـ 1 أو 2"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
+                            <span asp-validation-for="NationalNo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="FirstName" class="p-0 mb-1">الأسم الاول</label>
+                            <input asp-for="FirstName" class="form-control" required />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="SecondName" class="p-0 mb-1">الأسم الثاني</label>
+                            <input asp-for="SecondName" class="form-control" required />
+                            <span asp-validation-for="SecondName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="ThirdName" class="p-0 mb-1">الأسم الثالث</label>
+                            <input asp-for="ThirdName" class="form-control" />
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="LastName" class="p-0 mb-1">الأسم الاخير</label>
+                            <input asp-for="LastName" class="form-control" required />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="DateOfBirth" class="p-0 mb-1">تاريخ الميلاد</label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date" required />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="Gender" class="p-0 mb-1 d-block">الجنس</label>
+                            <input asp-for="Gender" type="radio" name="gender" value="0" id="male" checked onclick="setImage(@Model.ImageUrl)" />
+                            <span class="me-2">ذكر</span>
+                            <input asp-for="Gender" type="radio" name="gender" value="1" id="female" onclick="setImage(@Model.ImageUrl)" />
+                            <span>أنثى</span>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-6 col-lg-3">
+                            <label asp-for="Address" class="p-0 mb-1">العنوان</label>
+                            <textarea asp-for="Address" class="form-control" required></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="Phone" class="form-label p-0 mb-1">الهاتف</label>
+                            <div class="input-group">
+                                
+                                <input type="tel" asp-for="Phone" class="form-control" style="text-align:left"
+                                       placeholder="7xxxxxxxx" pattern="[0-9]*"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                       inputmode="numeric" maxlength="9" required />
+                                <span class="input-group-text">967+</span>
+                            </div>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="ImageUrl" class="p-0 mb-1">الصورة الشخصية</label>
+                            <input class="form-control" name="File" type="file" id="imageName" onchange="validateImage(this);showImagePreview(event)" />
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="Email" class="p-0 mb-1">البريد الالكتروني</label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                        </div>
+
+                        <div class="mb-3 col-12 col-sm-6 col-md-4 col-lg-3">
+                            <label asp-for="CountryId" class="p-0 mb-1">الدولة</label>
+                            <select asp-for="CountryId" asp-items="@ViewData["Countries"] as IEnumerable<SelectListItem>" class="form-control" required>
+                                <option disabled selected>__ أختر الدولة __</option>
+                            </select>
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right image section -->
+                    <div class="col-12 col-lg-2 mt-3 mt-lg-0">
+                        <h6 class="text-center text-primary">الصورة الشخصية</h6>
+                        <div class="border p-2 text-center">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="/images/person/@Model.ImageUrl" id="imagePreview" class="img-fluid rounded" />
+                                <a asp-action="DeleteImage" class="btn btn-danger my-2 w-100" asp-route-PersonId="@Model.Id">
+                                    <i class="fa-solid fa-trash me-2"></i> حذف الصورة
+                                </a>
+                            }
+                            else
+                            {
+                                <img src="/images/person-placeholder/@(Model.Gender == 0 ? "Male.png" : "Female.png")" id="imagePreview" class="img-fluid rounded" />
+                                <a id="removePreviewImg" class="btn btn-danger my-2 w-100" style="display:none" onclick="removeImage()">
+                                    <i class="fa-solid fa-trash me-2"></i> حذف الصورة
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-3 col-lg-2 mt-3">
+                        <button type="submit" class="btn btn-primary w-100">
+                            @if (ActionType == "أضافة")
+                            {
+                                <i class="fa-solid fa-user-plus fa-fw me-2"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-pencil me-1"></i>
+                            }
+                            @ActionType
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/js/gender-image.js"></script>
+    <script src="/js/PreviewImage.js"></script>
+}

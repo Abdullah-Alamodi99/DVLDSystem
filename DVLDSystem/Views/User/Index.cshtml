@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "المستخدمين";
+}
+@model List<ApplicationUser>
+
+<div class="main-content mb-3">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> المستخدمين </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">المستخدمين</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+        <div class="bg-white rounded p-3 shadow">
+            <div class="w-100 text-end">
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary my-2 mb-4 ">
+                    <i class="fa-solid fa-person-circle-plus me-2"></i> أضافة مستخدم
+                </a>
+            </div>
+
+            <table id="tblData" class="table table-striped table-borderless nowrap pt-1 w-100">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>رقم المستخدم</th>
+                        <th>رقم الشخص</th>
+                        <th>الاسم</th>
+                        <th>أسم المستخدم</th>
+                        <th>نشط</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/js/user.js"></script>
+}

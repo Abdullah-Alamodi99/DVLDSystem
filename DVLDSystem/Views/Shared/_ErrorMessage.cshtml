@@ -1,0 +1,29 @@
+﻿@model string
+
+<!-- The Modal -->
+<div class="modal" id="errorModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-danger flex-column">
+                <div class="error-box">
+                    <i class="fa-solid fa-xmark fa-2xl error-icon"></i>
+                </div>
+                <h4 class="modal-title text-white">حدث خطأ</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div id="errorMessage" class="modal-body text-center">
+                @Model
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">أغلاق</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

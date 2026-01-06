@@ -1,0 +1,142 @@
+﻿
+@model License
+@{
+    string? ErrorMessage = TempData["ErrorMessage"] as string;
+    bool ShowErrorModal = !string.IsNullOrEmpty(ErrorMessage);
+}
+
+@if(Model != null)
+{
+    string IssueReason = "";
+    switch (Model.IssueReason)
+    {
+        case (byte)License.enIssueReason.NewLicense:
+            IssueReason = "أول مرة";
+            break;
+        case (byte)License.enIssueReason.RenewLicense:
+            IssueReason = "تجديد";
+            break;
+        case (byte)License.enIssueReason.ReplaceForDamage:
+            IssueReason = "بدل تالف";
+            break;
+        case (byte)License.enIssueReason.ReplaceForLost:
+            IssueReason = "بدل فاقد";
+            break;
+        default:
+            IssueReason = "غير معروف";
+            break;
+    }
+    <div class="card bg-white my-3 shadow border-0 rounded position-relative">
+        <div class="card-header bg-primary p-3 text-white">
+            <h5 class="mb-0">رخصة قيادة محلية</h5>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-5">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">فئة الرخصة : </label>
+                        <span id="licenseClass" data-licenseClassId="@Model.LicenseClassId">@Model.LicenseClass.Name</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">أسم الشخص : </label>
+                        <span id="personFullName" class="text-primary fw-semibold">@Model.Application.Person.FullName</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">رقم الرخصة : </label>
+                        <span data-localLicenseId="@Model.Id" id="localLicenseId">@Model.Id</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">الرقم الوطني : </label>
+                        <span id="nationalNo">@Model.Application.Person.NationalNo</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-person-half-dress fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">الجنس : </label>
+                        <span id="gender">@(Model.Application.Person.Gender == 0 ? "ذكر" : "أنثى")</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">تاريخ الإصدار : </label>
+                        <span id="issueDate">@Model.IssueDate.ToShortDateString()</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">سبب الإصدار : </label>
+                        <span id="issueReason">@IssueReason</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-note-sticky fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">ملاحظات : </label>
+                        <span id="notes">@(string.IsNullOrEmpty(Model.Notes) ? "لا يوجد" : Model.Notes)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">الرخصة نشطة : </label>
+                        <span id="isActive">@(Model.IsActive ? "نعم" : "لا")</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">تاريخ الميلاد : </label>
+                        <span id="dateOfBirth">@Model.Application.Person.DateOfBirth.ToShortDateString()</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-person fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">معرف السائق : </label>
+                        <span id="driverId" data-driverId="@Model.DriverId">@Model.DriverId</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">تاريخ انتهاء الصلاحية : </label>
+                        <span id="expirationDate">@Model.ExpirationDate.ToShortDateString()</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fa-solid fa-id-card fa-fw fa-lg me-2 icon-primary"></i>
+                        <label class="fw-semibold">الرخصة محجوزة : </label>
+                        <span id="isDetained">@(Model.IsDetained ? "نعم" : "لا")</span>
+                    </div>
+                </div>
+                <div class="col-md-3 border p-2 mt-4 mt-lg-0">
+                    @if (!string.IsNullOrEmpty(Model.Application.Person.ImageUrl))
+                    {
+                        <img id="personImg" src="/images/person/@Model.Application.Person.ImageUrl" style="width:100%" />
+                    }
+                    else
+                    {
+                        if(Model.Application.Person.Gender == 0)
+                        {
+                            <img id="personImg" src="/images/person-placeholder/Male.png" style="width:100%" />
+                        }
+                        else
+                        {
+                            <img id="personImg" src="/images/person-placeholder/Female.png" style="width:100%" />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <img class="license-background" src="/images/License/License-background.png" />
+    </div>
+}
+else
+{
+    <partial name="_EmptyLocalLicenseCard" />
+}
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var showErrorModal = @ShowErrorModal.ToString().ToLower();
+
+            if (showErrorModal == true) {
+                $('#errorModal').modal('show');
+                $('#btnIssueInternationalLicense').prop('disable', true);
+            };
+        });
+    </script>
+}

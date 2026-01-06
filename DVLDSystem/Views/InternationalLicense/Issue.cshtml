@@ -1,0 +1,172 @@
+﻿@model InternationalLicense
+
+@{
+    ViewData["Title"] = "اصدار رخصة دولية";
+
+    string? ErrorMessage = TempData["ErrorMessage"] as string;
+    bool ShowErrorModal = !string.IsNullOrEmpty(ErrorMessage);
+}
+
+<div class="main-content my-3 my-lg-4">
+    <div class="container">
+        <partial name="_ErrorMessage" model="@ErrorMessage" />
+        <div class="bg-white p-3">
+            <form id="searchForm" onsubmit="return false;" class="get row align-items-center justify-content-between gy-3 gx-0">
+                <div class="col-12 col-lg-6 d-flex flex-column flex-lg-row align-items-lg-center">
+                    <label class="fw-semibold me-lg-2 mb-2 mb-lg-0 text-nowrap">رقم الرخصة المحلية : </label>
+                    <div class="d-flex flex-grow-1">
+                        <input type="text" id="searchValue" class="form-control d-inline-block" />
+                        <button id="searchBtn" type="submit" class="btn btn-primary ms-2">بحث</button>
+                    </div>
+                </div>
+            </form>
+            <div class="local-license-info">
+                <div id="licenseCard">
+                    <partial name="_LicenseInfo" model="@Model.LocalLicense" />
+                </div>
+            </div>
+            <div class="application-info">
+                <div class="card shadow-sm border-0 mt-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">بيانات الطلب</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                                    <label asp-for="@Model.ApplicationDate" class="fw-semibold">تاريخ الطلب : </label>
+                                    <span>@Model.ApplicationDate.ToShortDateString()</span>
+                                </div>
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                                    <label asp-for="@Model.IssueDate" class="fw-semibold">تاريخ الإصدار : </label>
+                                    <span>@Model.IssueDate.ToShortDateString()</span>
+                                </div>
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-coins fa-fw fa-lg me-2"></i>
+                                    <label asp-for="@Model.PaidFees" class="fw-semibold">الرسوم : </label>
+                                    <span>@Model.PaidFees</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-hashtag fa-fw fa-lg me-2 icon-primary"></i>
+                                    <label asp-for="@Model.IssuedUsingLocalLicenseId" class="fw-semibold">رقم الرخصة المحلية : </label>
+                                    <span id="issuedUsingLocalLicenseId">@(Model.IssuedUsingLocalLicenseId == 0 ? "???" : Model.IssuedUsingLocalLicenseId)</span>
+                                </div>
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-calendar-days fa-fw fa-lg me-2 icon-primary"></i>
+                                    <label asp-for="@Model.IssueDate" class="fw-semibold">تاريخ الانتهاء : </label>
+                                    <span>@Model.ExpirationDate.ToShortDateString()</span>
+                                </div>
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-user fa-fw fa-lg me-2"></i>
+                                    <label asp-for="@Model.User.UserName" class="fw-semibold">من إنشاء : </label>
+                                    <span>@Model.User.UserName</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post">
+                <input asp-for="@Model.IssueDate" hidden />
+                <input asp-for="@Model.ExpirationDate" hidden />
+                <input asp-for="@Model.DriverId" id="input-driverId" hidden />
+                <input asp-for="@Model.IssuedUsingLocalLicenseId" id="input-IssuedUsingLocalLicenseId" hidden />
+                <input asp-for="@Model.IsActive" hidden />
+                <input asp-for="@Model.ApplicationDate" hidden />
+                <input asp-for="@Model.ApplicationTypeId" hidden />
+                <input asp-for="@Model.ApplicationStatus" hidden />
+                <input asp-for="@Model.LastStatusDate" hidden />
+                <input asp-for="@Model.PaidFees" hidden />
+                <input asp-for="@Model.PersonId" hidden />
+                <input asp-for="@Model.CreatedByUserId" hidden />
+                <input asp-for="@Model.IssuedByUserId" hidden />
+
+
+                <button type="submit" id="btnIssueInternationalLicense" class="btn btn-primary mt-3">
+                    <i class="fa-solid fa-id-card fa-fw fa-lg me-2"></i> أصدار الرخصة
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function searchLocalLicense() {
+
+            var localLicenseId = $('#searchValue').val().trim();
+
+            // Hide any previous modal and clear previous results
+            $('#errorModal').modal('hide');
+            $('#licenseCard').empty();
+            $("#issuedUsingLocalLicenseId").text('—');
+
+            if (!localLicenseId) {
+                $("#errorMessage").text("يرجى إدخال رقم الرخصة أولاً.");
+                $('#errorModal').modal('show');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetLicense", "License")',
+                method: 'GET',
+                cache: false,
+                data: { LocalLicenseId: localLicenseId },
+                success: function (data, textStatus, xhr) {
+                    if (xhr.status === 200 && data.trim() !== "") {
+                        $('#licenseCard').html(data);
+                        SetLocalLicenseId();
+                        SetDriverId();
+                    } else {
+                        // License not found → load shared partial
+                        $.get('@Url.Action("EmptyLocalLicenseCard", "License")', function (partial) {
+                            $('#licenseCard').html(partial);
+                        });
+                        $("#errorMessage").text("لا توجد رخصة قيادة محلية مطابقة للبيانات المدخلة.");
+                        $('#errorModal').modal('show');
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 404) {
+                        // License not found → load shared partial
+                        $.get('@Url.Action("EmptyLocalLicenseCard", "License")', function (partial) {
+                            $('#licenseCard').html(partial);
+                        });
+                        $("#errorMessage").text("لا توجد رخصة قيادة محلية مطابقة للبيانات المدخلة.");
+                    } else {
+                        $("#errorMessage").text("حدث خطأ أثناء البحث عن الرخصة. يرجى المحاولة لاحقًا.");
+                    }
+                    $("#issuedUsingLocalLicenseId").text('???');
+                    $('#errorModal').modal('show');
+                }
+            });
+
+
+        }
+        function SetLocalLicenseId() {
+            let LocalLicenseId = $("#localLicenseId").data("locallicenseid");
+            $("#issuedUsingLocalLicenseId").text(LocalLicenseId);
+            $("#input-IssuedUsingLocalLicenseId").val(LocalLicenseId);
+        }
+        function SetDriverId() {
+            $("#input-driverId").val($("#driverId").data("driverid"));
+        }
+
+        // Bind click to search button
+        $('#searchBtn').on('click', searchLocalLicense);
+
+        // Allow pressing Enter to search
+        $('#searchValue').on('keypress', function (e) {
+            if (e.which === 13) { // Enter key
+                searchLocalLicense();
+            }
+        });
+
+    </script>
+}

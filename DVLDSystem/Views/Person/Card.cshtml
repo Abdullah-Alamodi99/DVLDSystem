@@ -1,0 +1,22 @@
+﻿@model Person
+@{
+    ViewData["Title"] = "معلومات الشخص";
+}
+<div class="main-content">
+    <div class="container">
+        @* ==== page header ====*@
+        <div class="page-header d-flex justify-content-between align-items-center py-4">
+            <h5 class="page-title mb-1"> بيانات الشخص </h5>
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a asp-controller="Person" asp-action="Index">قائمة الاشخاص</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">بيانات الشخص</li>
+                </ol>
+            </div>
+        </div>
+        @* ==== page header ====*@
+
+        <partial name="_PersonCard" />
+
+    </div>
+</div>
