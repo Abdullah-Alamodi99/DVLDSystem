@@ -99,9 +99,6 @@ DVLD/
 ### License Renewal
 ![License Renewal](screenshots/license-renewal.png)
 
-### Driver Details
-![Driver Details](screenshots/driver-details.png)
-
 ### Filter 
 ![Filter](screenshots/filter.png)
 
